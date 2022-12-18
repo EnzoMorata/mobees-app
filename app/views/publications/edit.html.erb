@@ -1,0 +1,28 @@
+<%= link_to 'Volver al Catálogo', publications_path %>
+<%= link_to 'Volver a la publicación', publication_path(@publication.id) %>
+
+<h1>Editar Película: <%= @publication.title %><h1>
+
+<%= form_with model: @publication do |form| %>
+    <div>
+        <%= form.label "Título" %>
+        <%= form.text_field :title %>
+    </div>  
+    <div>
+        <%= form.label "Sinopsis" %>
+        <%= form.text_field :synopsis %>
+    </div>
+    <div>
+        <% if @publication.thumbnail.present? %>
+            <br>
+            <%= image_tag(@publication.thumbnail.variant(resize_to_fill: [320, 180])) %>
+            <br>
+        <% end %>
+        <%= form.label "Miniatura" %>
+        <%= form.file_field :thumbnail %>
+    </div>
+    <div>
+        <%= form.submit "Editar película" %>
+    </div>
+<% end %>
+

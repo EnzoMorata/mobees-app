@@ -1,0 +1,41 @@
+<nav>
+    <header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href=<%= home_path %> class="nav-link px-2 text-white">Home</a></li>
+          <li><a href=<%= publications_path %> class="nav-link px-2 text-white">Catálogo</a></li>
+          <!-- <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">About</a></li> -->
+        </ul>
+        <!--
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="get">
+          <input list="publications" type="search" class="form-control form-control-dark text-bg-dark" placeholder="Busca peliculas..." aria-label="Search"  >
+        </form> -->
+
+        <div class="text-end">
+          <div class="social-links d-none d-md-block">
+            <% if user_signed_in? %>
+              <%= link_to 'Gestionar cuenta', edit_user_registration_path%>
+              <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete %>
+              <% if current_user.avatar.present? %>
+                <%= image_tag(current_user.avatar.variant(resize_to_fill: [50, 50]), class: "rounded-circle") %>
+              <% end %>
+            <% else %>
+              <%= link_to 'Registrarse', new_user_registration_path%>
+              <%= link_to 'Iniciar sesión', new_user_session_path%>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  </header>
+      
+      </div>
+    </div>
+    </section>
+      
+</nav>

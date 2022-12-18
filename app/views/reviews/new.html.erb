@@ -1,0 +1,21 @@
+<%= link_to 'Volver a la publicación', publication_path(@publication.id) %>
+
+<h1>Nueva Reseña para la película <%= @publication.title %></h1>
+
+<%= form_with model: [@publication, Review.new] do |form| %>
+    <% unless @already_publish %>
+        <div>
+            <%= form.label "Calificación" %>
+            <%= form.text_field :rating %>
+        </div>
+        <div>
+            <%= form.label "Contenido" %>
+            <%= form.text_field :content %>
+        </div>
+        <div>
+            <%= form.submit "Subir nueva reseña" %>
+        </div>
+    <% else %>
+        <p>Ya tienes una publicación realizada, no puedes hacer más para esta publicación.</p>
+    <% end %>
+<% end %>

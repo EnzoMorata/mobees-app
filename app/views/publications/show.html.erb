@@ -1,0 +1,107 @@
+<%= link_to 'Volver al Catálogo', publications_path %>
+<br>
+<br>
+
+<% if @publication.thumbnail.present? %>
+    <br>
+    <%= image_tag(@publication.thumbnail.variant(resize_to_fill: [320, 180])) %>
+    <br>
+<% end %>
+<h3>Título: <%= "#{@publication.title}" %></h3>
+<p>Sinopsis: <%= "#{@publication.synopsis}" %></p>
+
+
+<% if @is_moderator %>
+    <%= link_to 'Editar Película', edit_publication_path(@publication.id)%>
+
+    <br>
+    <br>
+
+    <%= link_to 'Eliminar Película', publication_path(@publication.id), method: :delete, data: { confirm: 'Confirme que desea eliminar esta publicación' }%> 
+
+    <br>
+    <br>
+
+<% end %>
+
+<% if @is_client %>
+    <h5>¿Deseas realizar una nueva solicitud de reserva?</h5>
+    <%= link_to 'Realizar nueva solicitud de reserva', new_publication_reserve_request_path(@publication) %>
+    <br>
+    <br>
+
+    <% if  @publication.reserve_requests.exists?(user_id: current_user.id) %>
+        <h3>Mis Solicitudes de Reserva</h3>
+
+        <% @publication.reserve_requests.where(user_id: current_user.id).each do |reserve_request| %>
+            <p>Fecha de inicio: <%= reserve_request.start_date %> Fecha de termino: <%= reserve_request.finish_date %></p>
+
+            <% if reserve_request.approval_state == nil %>
+                <p>Estado: Pendiente de revisión</p>
+                <%= link_to 'Editar solicitud de reserva', edit_publication_reserve_request_path(@publication.id, reserve_request.id)%>
+                <%= link_to 'Eliminar solicitud de reserva', publication_reserve_request_path(@publication.id, reserve_request.id), method: :delete, data: { confirm: 'Confirme que desea eliminar esta solicitud de reserva' } %>
+            
+            <% elsif reserve_request.approval_state %>
+                <p>Estado: Aprobado </p>
+
+            <% elsif not reserve_request.approval_state %>
+                <p>Estado: Rechazado </p>
+            <% end %>
+
+            
+        <% end %>
+    <% end %>
+
+<% elsif @is_moderator %>
+    <h5>Gestionar Solicitudes de Reserva pendientes</h5>
+    <% if @publication.reserve_requests.exists?(approval_state: nil) %>
+
+        <% @publication.reserve_requests.where(approval_state: nil).each do |reserve_request| %>
+            <p>Nombre del solicitante: <%= User.find(reserve_request.user_id).name %></p>
+            <p>Correo del solicitante: <%= User.find(reserve_request.user_id).email %></p>
+            <p>Fecha de inicio: <%= reserve_request.start_date %> Fecha de termino: <%= reserve_request.finish_date %></p>
+            <%= button_to 'Aprobar solicitud de reserva ', approve_publication_reserve_request_path(@publication, reserve_request), method: :post%>
+            <%= button_to 'Rechazar solicitud de reserva', disapprove_publication_reserve_request_path(@publication, reserve_request), method: :delete %>
+        <% end %>
+
+    <% else %>
+
+        <p>No hay solicitudes de reserva pendientes</p>        
+
+    <% end %>
+<% end %>
+
+<br>
+<br>
+
+<div>
+    <h3>Reviews</h1>
+    <% if current_user.reserve_requests.exists?(approval_state: true, publication_id: @publication.id) %>
+        <%= link_to 'Crear Reseña', new_publication_review_path(@publication) %>
+        <br>
+        <br>
+    <% end %>
+    <div style='display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around'>
+        <% @publication.reviews.each do |review| %>
+            <div style='display: flex; flex-direction: column'>
+                <div style='display: flex; flex-direction: row'>
+                    <div style='flex-shrink: 3'>
+                        <% if review.user.avatar.present? %>
+                            <%= image_tag(review.user.avatar.variant(resize_to_fill: [70, 70]), class: "rounded-circle") %>
+                        <% end %>
+                    </div>
+                    <div style='display: flex; flex-direction: column; justify-content: space-between'>
+                        <h4><%= review.user.name %></h1>
+                        <h5>Rating: <%= review.rating %></p>
+                    </div>
+                </div>
+                <p><%= review.content %></p>
+                <% if current_user == review.user %>
+                    <%= link_to 'Editar Reseña', edit_publication_review_path(@publication.id, review.id)%>
+                    <%= link_to 'Eliminar Reseña', publication_review_path(@publication.id, review.id), method: :delete, data: { confirm: 'Confirme que desea eliminar esta reseña' } %>
+                <% end %>
+            </div>
+            
+        <% end %>
+    </div>
+</div>

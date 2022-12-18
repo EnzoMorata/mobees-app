@@ -1,0 +1,17 @@
+<%= link_to 'Volver a la publicación', publication_path(@publication.id) %>
+
+<h1>Nueva Solicitud de Reserva para la película <%= @publication.title %></h1>
+
+<%= form_with model: [@publication, ReserveRequest.new] do |form| %>
+    <div>
+        <%= form.label "Inicio Reserva" %>
+        <%= form.datetime_local_field :start_date %>
+    </div>
+    <div>
+        <%= form.label "Fin Reserva" %>
+        <%= form.datetime_local_field :finish_date %>
+    </div>
+    <div>
+        <%= form.submit "Realizar reserva" %>
+    </div>
+<% end %>

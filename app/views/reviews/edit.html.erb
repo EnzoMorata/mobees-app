@@ -1,0 +1,18 @@
+<%= link_to 'Volver a la publicación', publication_path(@publication.id) %>
+
+<h1>Editar Reseña de <%= @publication.title %><h1>
+
+
+<%= form_with(model: [@publication, @review]) do |form| %>
+    <div>
+        <%= form.label "Calificación" %>
+        <%= form.text_field :rating %>
+    </div>
+    <div>
+        <%= form.label "Contenido" %>
+        <%= form.text_field :content %>
+    </div>
+    <div>
+        <%= form.submit "Editar reseña" %>
+    </div>
+<% end %>

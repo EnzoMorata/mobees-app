@@ -1,0 +1,21 @@
+<%= link_to 'Volver al Catálogo', publications_path %>
+
+<h1>Nueva Película</h1>
+
+<%= form_with model: Publication.new do |form| %>
+    <div>
+        <%= form.label "Título" %>
+        <%= form.text_field :title %>
+    </div>
+    <div>
+        <%= form.label "Sinopsis" %>
+        <%= form.text_field :synopsis %>
+    </div>
+    <div>
+        <%= form.label "Miniatura" %>
+        <%= form.file_field :thumbnail %>
+    </div>
+    <div>
+        <%= form.submit "Subir nueva película" %>
+    </div>
+<% end %>

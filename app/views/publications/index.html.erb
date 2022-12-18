@@ -1,0 +1,27 @@
+<% if @is_moderator %>
+    <h2>Agregar nueva Película</h2>
+        <%= link_to 'Agregar nueva Película', new_publication_path %>
+        <br>
+        <br>
+<% end %>
+<h1>Peliculas disponibles:</h1>
+<div style='display: flex; flex-direction: row; flex-wrap: wrap; row-gap: 30px; justify-content: space-around'>
+    <% @publications.each do |publication| %>
+        <div style='display: flex; flex-direction: column'>
+            <% if user_signed_in? %>
+                <% if publication.thumbnail.present? %>
+                    <%= link_to image_tag(publication.thumbnail.variant(resize_to_fill: [320, 180])), publication_path(publication.id) %>
+                <% end %>
+                <%= link_to publication.title, publication_path(publication.id), {style: "font-size: 1.3rem"} %>
+            <% else %>
+                <% if publication.thumbnail.present? %>
+                    <%= image_tag(publication.thumbnail.variant(resize_to_fill: [320, 180])) %>
+                <% end %>          
+                <h3><%= publication.title %></h3> 
+            <% end %>
+             
+        </div>
+    <% end %>
+
+</div>
+
